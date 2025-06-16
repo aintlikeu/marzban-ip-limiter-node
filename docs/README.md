@@ -235,7 +235,7 @@ redis-cli -u $CENTRAL_REDIS_URL ping
 ls -la /var/lib/marzban-node/access.log
 
 # Проверить права доступа
-docker exec marzban-node-agent ls -la /var/lib/marzban/
+docker exec marzban-node-agent ls -la /var/lib/marzban-node/
 
 # Проверить здоровье
 sudo /opt/marzban-node-agent/scripts/health-check.sh

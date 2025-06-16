@@ -5,6 +5,7 @@ services:
       dockerfile: docker/Dockerfile
     container_name: marzban-node-agent
     restart: unless-stopped
+    user: root
     
     # Environment variables from .env file
     env_file:
