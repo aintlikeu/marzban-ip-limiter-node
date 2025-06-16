@@ -9,7 +9,7 @@ services:
     
     # Mount access.log as read-only
     volumes:
-      - /var/lib/marzban-node/access.log:/var/lib/marzban/access.log:ro
+      - /var/lib/marzban-node/access.log:/app/access.log:ro
     
     # Health check
     healthcheck:

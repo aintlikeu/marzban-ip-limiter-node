@@ -23,7 +23,7 @@ if [[ ! -f .env ]]; then
     echo "⚠️  IMPORTANT: Please edit .env file with your settings:"
     echo "   - Set your NODE_ID and NODE_NAME"
     echo "   - Configure CENTRAL_REDIS_URL with your Redis server"
-    echo "   - Verify ACCESS_LOG_PATH matches your Marzban setup"
+    echo "   - Verify that /var/lib/marzban-node/access.log exists on host"
     echo ""
     echo "After editing .env, run this script again."
     exit 1
