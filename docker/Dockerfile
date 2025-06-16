@@ -4,9 +4,6 @@ FROM python:3.12-slim
 # Set working directory
 WORKDIR /app
 
-# Create non-privileged user for security
-RUN groupadd -r nodeagent && useradd -r -g nodeagent nodeagent
-
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     --no-install-recommends \
@@ -22,12 +19,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy application code
 COPY src/ ./src/
 
-# Create directory for logs and ensure proper permissions
-RUN mkdir -p /var/log/nodeagent && \
-    chown -R nodeagent:nodeagent /app /var/log/nodeagent
-
-# Switch to non-privileged user
-USER nodeagent
+# Create directory for logs
+RUN mkdir -p /var/log/nodeagent
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
