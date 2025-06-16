@@ -216,9 +216,9 @@ services:
       - NODE_ID=\${NODE_ID}
       - NODE_NAME=\${NODE_NAME}
       - CENTRAL_REDIS_URL=\${CENTRAL_REDIS_URL}
-      - ACCESS_LOG_PATH=/var/lib/marzban/access.log
+      - ACCESS_LOG_PATH=/var/lib/marzban-node/access.log
     volumes:
-      - /var/lib/marzban/access.log:/var/lib/marzban/access.log:ro
+      - /var/lib/marzban-node/access.log:/var/lib/marzban-node/access.log:ro
     networks:
       - marzban-network
 
@@ -249,7 +249,7 @@ docker-compose up -d
 NODE_ID=unique-node-identifier         # Уникальный в рамках всей сети
 NODE_NAME=Germany-Frankfurt-01         # Читаемое имя
 CENTRAL_REDIS_URL=redis://main-server:6379/0
-ACCESS_LOG_PATH=/var/lib/marzban/access.log
+ACCESS_LOG_PATH=/var/lib/marzban-node/access.log
 
 # Настройки производительности
 BATCH_SIZE=50                          # Для VPS: 25-50, для мощных серверов: 100+
@@ -271,8 +271,8 @@ sudo find /var -name "access.log" -type f 2>/dev/null | grep marzban
 docker inspect marzban | grep -A 10 "Mounts"
 
 # Настройка прав доступа (если нужно)
-sudo chmod 644 /var/lib/marzban/access.log
-sudo chown marzban:marzban /var/lib/marzban/access.log
+sudo chmod 644 /var/lib/marzban-node/access.log
+sudo chown marzban:marzban /var/lib/marzban-node/access.log
 ```
 
 ### 3. Проверка сетевого подключения
@@ -323,7 +323,7 @@ redis-cli -u "$CENTRAL_REDIS_URL" llen node_logs_queue
 
 ```bash
 # Генерация тестового лога (если возможно)
-echo "2024/01/15 10:30:45 [info] accepted connection from 192.168.1.100 email: test@example.com" >> /var/lib/marzban/access.log
+echo "2024/01/15 10:30:45 [info] accepted connection from 192.168.1.100 email: test@example.com" >> /var/lib/marzban-node/access.log
 
 # Проверка появления данных в Redis
 redis-cli -u "$CENTRAL_REDIS_URL" lpop node_logs_queue
@@ -433,8 +433,8 @@ sudo find /var -name "access.log" -type f 2>/dev/null
 docker inspect marzban | grep -A 5 "Mounts"
 
 # Создание тестового файла
-sudo touch /var/lib/marzban/access.log
-sudo chmod 644 /var/lib/marzban/access.log
+sudo touch /var/lib/marzban-node/access.log
+sudo chmod 644 /var/lib/marzban-node/access.log
 ```
 
 ## 📚 Следующие шаги

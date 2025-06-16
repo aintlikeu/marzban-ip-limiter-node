@@ -72,7 +72,7 @@ python3 run.py
 NODE_ID=your-node-001
 NODE_NAME=Your Node Name
 CENTRAL_REDIS_URL=redis://your-redis-server:6379/0
-ACCESS_LOG_PATH=/var/lib/marzban/access.log
+ACCESS_LOG_PATH=/var/lib/marzban-node/access.log
 ```
 
 ### Проверка конфигурации:

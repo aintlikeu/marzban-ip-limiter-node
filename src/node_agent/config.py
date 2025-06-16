@@ -77,7 +77,7 @@ class ConfigService:
             node_id=os.getenv("NODE_ID", "").strip(),
             node_name=os.getenv("NODE_NAME", "").strip(),
             central_redis_url=os.getenv("CENTRAL_REDIS_URL", "").strip(),
-            access_log_path=os.getenv("ACCESS_LOG_PATH", "/var/lib/marzban/access.log").strip(),
+            access_log_path=os.getenv("ACCESS_LOG_PATH", "/var/lib/marzban-node/access.log").strip(),
             batch_size=int(os.getenv("BATCH_SIZE", "50")),
             flush_interval=float(os.getenv("FLUSH_INTERVAL", "3.0")),
             max_retries=int(os.getenv("MAX_RETRIES", "5")),

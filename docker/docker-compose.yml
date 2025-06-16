@@ -12,7 +12,7 @@ services:
     
     # Mount access.log as read-only
     volumes:
-      - /var/lib/marzban/access.log:/var/lib/marzban/access.log:ro
+      - /var/lib/marzban-node/access.log:/var/lib/marzban-node/access.log:ro
     
     # Network configuration (connect to existing marzban network if available)
     networks:

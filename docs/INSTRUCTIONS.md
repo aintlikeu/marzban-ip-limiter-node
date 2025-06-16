@@ -12,7 +12,7 @@
 
 ### **Архитектура:**
 
-- Агент читает `/var/lib/marzban/access.log` в реальном времени (tail -f)
+- Агент читает `/var/lib/marzban-node/access.log` в реальном времени (tail -f)
 - Отправляет логи в центральный Redis через список `node_logs_queue`
 - Поддерживает буферизацию, повторные попытки и восстановление позиции
 - Минимальные зависимости, работает в Docker контейнере
@@ -152,7 +152,7 @@ marzban-ip-limiter-node/
 # - NODE_ID=node-001
 # - NODE_NAME=Germany-Frankfurt-01
 # - CENTRAL_REDIS_URL=redis://main-server:6379/0
-# - ACCESS_LOG_PATH=/var/lib/marzban/access.log
+# - ACCESS_LOG_PATH=/var/lib/marzban-node/access.log
 # - BATCH_SIZE=50
 # - FLUSH_INTERVAL=3.0
 # - MAX_RETRIES=5

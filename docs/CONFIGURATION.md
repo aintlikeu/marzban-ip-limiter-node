@@ -53,13 +53,13 @@ CENTRAL_REDIS_URL=redis://hostname:6379/0
 
 #### ACCESS_LOG_PATH
 ```bash
-ACCESS_LOG_PATH=/var/lib/marzban/access.log
+ACCESS_LOG_PATH=/var/lib/marzban-node/access.log
 ```
 - **Описание**: Полный путь к файлу логов Marzban
-- **По умолчанию**: `/var/lib/marzban/access.log`
+- **По умолчанию**: `/var/lib/marzban-node/access.log`
 - **Примеры**:
   ```bash
-  /var/lib/marzban/access.log          # Стандартная установка
+  /var/lib/marzban-node/access.log          # Стандартная установка
   /opt/marzban/logs/access.log         # Кастомная установка
   /home/user/marzban/access.log        # Пользовательская установка
   ```
@@ -151,7 +151,7 @@ LOG_LEVEL=DEBUG
 NODE_ID=prod-low-001
 NODE_NAME=Production Low Load
 CENTRAL_REDIS_URL=redis://prod-redis:6379/0
-ACCESS_LOG_PATH=/var/lib/marzban/access.log
+ACCESS_LOG_PATH=/var/lib/marzban-node/access.log
 BATCH_SIZE=25
 FLUSH_INTERVAL=5.0
 MAX_RETRIES=5
@@ -165,7 +165,7 @@ LOG_LEVEL=INFO
 NODE_ID=prod-high-001
 NODE_NAME=Production High Load
 CENTRAL_REDIS_URL=redis://prod-redis:6379/0
-ACCESS_LOG_PATH=/var/lib/marzban/access.log
+ACCESS_LOG_PATH=/var/lib/marzban-node/access.log
 BATCH_SIZE=200
 FLUSH_INTERVAL=2.0
 MAX_RETRIES=8
@@ -179,7 +179,7 @@ LOG_LEVEL=WARNING
 NODE_ID=economy-001
 NODE_NAME=Economy VPS Node
 CENTRAL_REDIS_URL=redis://redis-server:6379/0
-ACCESS_LOG_PATH=/var/lib/marzban/access.log
+ACCESS_LOG_PATH=/var/lib/marzban-node/access.log
 BATCH_SIZE=100
 FLUSH_INTERVAL=10.0
 MAX_RETRIES=3

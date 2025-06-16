@@ -115,8 +115,8 @@ main() {
     done
     
     # Access log path
-    read -p "Marzban access log path [/var/lib/marzban/access.log]: " LOG_PATH
-    LOG_PATH="${LOG_PATH:-/var/lib/marzban/access.log}"
+    read -p "Marzban access log path [/var/lib/marzban-node/access.log]: " LOG_PATH
+    LOG_PATH="${LOG_PATH:-/var/lib/marzban-node/access.log}"
     
     # Advanced settings
     echo

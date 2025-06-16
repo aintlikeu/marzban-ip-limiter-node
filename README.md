@@ -68,7 +68,7 @@ docker-compose -f docker/docker-compose.standalone.yml up -d
 NODE_ID=germany-01
 NODE_NAME=Germany-Frankfurt-01  
 CENTRAL_REDIS_URL=redis://your-redis-server:6379/0
-ACCESS_LOG_PATH=/var/lib/marzban/access.log
+ACCESS_LOG_PATH=/var/lib/marzban-node/access.log
 ```
 
 ## 📊 Мониторинг

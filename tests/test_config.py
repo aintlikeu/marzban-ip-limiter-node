@@ -25,7 +25,7 @@ class TestNodeConfig:
             node_id="test-001",
             node_name="Test Node",
             central_redis_url="redis://localhost:6379/0",
-            access_log_path="/var/lib/marzban/access.log"
+            access_log_path="/var/lib/marzban-node/access.log"
         )
         
         assert config.node_id == "test-001"
@@ -41,7 +41,7 @@ class TestNodeConfig:
                 node_id="",
                 node_name="Test Node",
                 central_redis_url="redis://localhost:6379/0",
-                access_log_path="/var/lib/marzban/access.log"
+                access_log_path="/var/lib/marzban-node/access.log"
             )
         
         with pytest.raises(ValueError, match="NODE_NAME is required"):
@@ -49,7 +49,7 @@ class TestNodeConfig:
                 node_id="test-001",
                 node_name="",
                 central_redis_url="redis://localhost:6379/0",
-                access_log_path="/var/lib/marzban/access.log"
+                access_log_path="/var/lib/marzban-node/access.log"
             )
     
     def test_invalid_numeric_values(self):
@@ -59,7 +59,7 @@ class TestNodeConfig:
                 node_id="test-001",
                 node_name="Test Node",
                 central_redis_url="redis://localhost:6379/0",
-                access_log_path="/var/lib/marzban/access.log",
+                access_log_path="/var/lib/marzban-node/access.log",
                 batch_size=0
             )
         
@@ -68,7 +68,7 @@ class TestNodeConfig:
                 node_id="test-001",
                 node_name="Test Node",
                 central_redis_url="redis://localhost:6379/0",
-                access_log_path="/var/lib/marzban/access.log",
+                access_log_path="/var/lib/marzban-node/access.log",
                 flush_interval=-1.0
             )
     
@@ -79,7 +79,7 @@ class TestNodeConfig:
                 node_id="test-001",
                 node_name="Test Node",
                 central_redis_url="redis://localhost:6379/0",
-                access_log_path="/var/lib/marzban/access.log",
+                access_log_path="/var/lib/marzban-node/access.log",
                 log_level="INVALID"
             )
     
@@ -89,7 +89,7 @@ class TestNodeConfig:
             node_id="test-001",
             node_name="Test Node",
             central_redis_url="redis://localhost:6379/0",
-            access_log_path="/var/lib/marzban/access.log",
+            access_log_path="/var/lib/marzban-node/access.log",
             log_level="debug"
         )
         
@@ -151,7 +151,7 @@ class TestConfigService:
             config = ConfigService.load_from_env()
             
             assert config.node_id == 'minimal-test'
-            assert config.access_log_path == '/var/lib/marzban/access.log'  # default
+            assert config.access_log_path == '/var/lib/marzban-node/access.log'  # default
             assert config.batch_size == 50  # default
             assert config.flush_interval == 3.0  # default
             assert config.log_level == 'INFO'  # default

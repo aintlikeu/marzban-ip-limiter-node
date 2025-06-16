@@ -78,7 +78,7 @@ docker-compose -f docker/docker-compose.yml up -d
 NODE_ID=germany-01
 NODE_NAME=Germany-Frankfurt-01  
 CENTRAL_REDIS_URL=redis://your-redis-server:6379/0
-ACCESS_LOG_PATH=/var/lib/marzban/access.log
+ACCESS_LOG_PATH=/var/lib/marzban-node/access.log
 BATCH_SIZE=50
 FLUSH_INTERVAL=3.0
 LOG_LEVEL=INFO
@@ -93,7 +93,7 @@ LOG_LEVEL=INFO
 | `NODE_ID` | Уникальный ID ноды | - | ✅ |
 | `NODE_NAME` | Читаемое имя ноды | - | ✅ |
 | `CENTRAL_REDIS_URL` | URL центрального Redis | - | ✅ |
-| `ACCESS_LOG_PATH` | Путь к access.log | `/var/lib/marzban/access.log` | ✅ |
+| `ACCESS_LOG_PATH` | Путь к access.log | `/var/lib/marzban-node/access.log` | ✅ |
 | `BATCH_SIZE` | Размер батча логов | `50` | ❌ |
 | `FLUSH_INTERVAL` | Интервал отправки (сек) | `3.0` | ❌ |
 | `MAX_RETRIES` | Макс. попыток отправки | `5` | ❌ |
@@ -232,7 +232,7 @@ redis-cli -u $CENTRAL_REDIS_URL ping
 **2. Логи не отправляются**
 ```bash
 # Проверить доступность файла логов
-ls -la /var/lib/marzban/access.log
+ls -la /var/lib/marzban-node/access.log
 
 # Проверить права доступа
 docker exec marzban-node-agent ls -la /var/lib/marzban/
