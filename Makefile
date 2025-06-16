@@ -61,16 +61,16 @@ run-dev: ## Run with development settings
 docker-build: build ## Alias for build
 
 docker-run: ## Run the agent in Docker
-	docker-compose -f docker/docker-compose.yml up -d
+	docker-compose -f docker/docker-compose.standalone.yml up -d
 
 docker-stop: ## Stop the Docker containers
-	docker-compose -f docker/docker-compose.yml down
+	docker-compose -f docker/docker-compose.standalone.yml down
 
 docker-logs: ## Show Docker container logs
-	docker-compose -f docker/docker-compose.yml logs -f
+	docker-compose -f docker/docker-compose.standalone.yml logs -f
 
 docker-restart: ## Restart Docker containers
-	docker-compose -f docker/docker-compose.yml restart
+	docker-compose -f docker/docker-compose.standalone.yml restart
 
 # Health and monitoring
 health-check: ## Run health check
@@ -104,7 +104,7 @@ clean: ## Clean up generated files
 	rm -rf .coverage
 
 clean-docker: ## Clean up Docker images and containers
-	docker-compose -f docker/docker-compose.yml down --rmi all --volumes
+	docker-compose -f docker/docker-compose.standalone.yml down --rmi all --volumes
 	docker system prune -f
 
 # Development helpers
@@ -175,3 +175,16 @@ status: ## Show project status
 	@docker ps | grep marzban-node-agent || echo "  ❌ Container not running"
 
 info: status ## Alias for status
+
+# Uninstall and cleanup
+uninstall: ## Uninstall the agent from system
+	sudo ./scripts/uninstall.sh
+
+uninstall-force: ## Force uninstall without confirmation
+	sudo ./scripts/uninstall.sh --force
+
+uninstall-local: ## Remove local development environment
+	make clean
+	make clean-docker
+	rm -f .env
+	@echo "✅ Local environment cleaned"

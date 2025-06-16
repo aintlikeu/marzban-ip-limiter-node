@@ -58,7 +58,7 @@ check_container() {
     }
     
     # Check if container exists and is running
-    if docker-compose -f docker/docker-compose.yml ps | grep -q "Up"; then
+    if docker-compose -f docker/docker-compose.standalone.yml ps | grep -q "Up"; then
         print_success "Container is running"
         
         # Get container stats
@@ -78,7 +78,7 @@ check_container() {
 check_redis() {
     print_status "Checking Redis connectivity..."
     
-    local result=$(docker-compose -f "$AGENT_DIR/docker/docker-compose.yml" exec -T node-agent python -c "
+    local result=$(docker-compose -f "$AGENT_DIR/docker/docker-compose.standalone.yml" exec -T node-agent python -c "
 import sys
 sys.path.append('/app/src')
 try:
@@ -118,7 +118,7 @@ except Exception as e:
 check_log_file() {
     print_status "Checking access log file..."
     
-    local log_result=$(docker-compose -f "$AGENT_DIR/docker/docker-compose.yml" exec -T node-agent python -c "
+    local log_result=$(docker-compose -f "$AGENT_DIR/docker/docker-compose.standalone.yml" exec -T node-agent python -c "
 import sys
 sys.path.append('/app/src')
 import os
@@ -155,7 +155,7 @@ except Exception as e:
 get_metrics() {
     print_status "Getting agent metrics..."
     
-    local metrics=$(docker-compose -f "$AGENT_DIR/docker/docker-compose.yml" exec -T node-agent python -c "
+    local metrics=$(docker-compose -f "$AGENT_DIR/docker/docker-compose.standalone.yml" exec -T node-agent python -c "
 import sys
 sys.path.append('/app/src')
 import json
@@ -187,7 +187,7 @@ check_recent_logs() {
     print_status "Checking recent logs (last 10 lines)..."
     
     echo "--- Container Logs ---"
-    docker-compose -f "$AGENT_DIR/docker/docker-compose.yml" logs --tail=10 node-agent 2>/dev/null | sed 's/^/  /'
+    docker-compose -f "$AGENT_DIR/docker/docker-compose.standalone.yml" logs --tail=10 node-agent 2>/dev/null | sed 's/^/  /'
     echo
 }
 
@@ -261,7 +261,7 @@ main() {
         print_error "Overall health check: FAILED"
         echo
         echo "Troubleshooting steps:"
-        echo "1. Check logs: docker-compose -f $AGENT_DIR/docker/docker-compose.yml logs"
+        echo "1. Check logs: docker-compose -f $AGENT_DIR/docker/docker-compose.standalone.yml logs"
         echo "2. Restart service: systemctl restart $SERVICE_NAME"
         echo "3. Check configuration: $AGENT_DIR/config/.env"
         echo "4. Verify Redis connectivity manually"

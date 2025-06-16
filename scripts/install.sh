@@ -100,7 +100,13 @@ copy_files() {
     # Create default .env if it doesn't exist
     if [ ! -f "$CONFIG_DIR/.env" ]; then
         cp "$CONFIG_DIR/.env.example" "$CONFIG_DIR/.env"
-        print_warning "Created default .env file. Please edit $CONFIG_DIR/.env with your configuration."
+        print_warning "Created default .env file at $CONFIG_DIR/.env"
+        print_warning "Please edit this file with your configuration before starting the service!"
+        
+        # Set minimal required values to prevent immediate failure
+        sed -i 's/NODE_ID=.*/NODE_ID=change-me/' "$CONFIG_DIR/.env"
+        sed -i 's/NODE_NAME=.*/NODE_NAME=Change Me/' "$CONFIG_DIR/.env"
+        sed -i 's/CENTRAL_REDIS_URL=.*/CENTRAL_REDIS_URL=redis:\/\/localhost:6379\/0/' "$CONFIG_DIR/.env"
     fi
     
     print_success "Files copied successfully"
@@ -130,8 +136,8 @@ After=docker.service
 Type=oneshot
 RemainAfterExit=yes
 WorkingDirectory=$AGENT_DIR
-ExecStart=/usr/bin/docker-compose -f docker/docker-compose.yml up -d
-ExecStop=/usr/bin/docker-compose -f docker/docker-compose.yml down
+ExecStart=/usr/bin/docker-compose -f docker/docker-compose.standalone.yml up -d
+ExecStop=/usr/bin/docker-compose -f docker/docker-compose.standalone.yml down
 TimeoutStartSec=0
 
 [Install]
@@ -151,19 +157,34 @@ start_service() {
     
     cd "$AGENT_DIR"
     
+    # Check if configuration is set
+    if grep -q "change-me" "$CONFIG_DIR/.env" || grep -q "localhost:6379" "$CONFIG_DIR/.env"; then
+        print_warning "Default configuration detected!"
+        print_warning "Please edit $CONFIG_DIR/.env with your actual Redis server details"
+        print_warning "The service may fail to start without proper configuration"
+        echo
+        
+        read -p "Do you want to continue anyway? (y/N): " confirm
+        if [[ ! $confirm =~ ^[Yy]$ ]]; then
+            print_status "Installation paused. Edit $CONFIG_DIR/.env and run:"
+            print_status "  sudo systemctl start $SERVICE_NAME"
+            return 0
+        fi
+    fi
+    
     # Start with docker-compose
-    docker-compose -f docker/docker-compose.yml up -d
+    docker-compose -f docker/docker-compose.standalone.yml up -d
     
     # Wait for container to start
     sleep 5
     
     # Check status
-    if docker-compose -f docker/docker-compose.yml ps | grep -q "Up"; then
+    if docker-compose -f docker/docker-compose.standalone.yml ps | grep -q "Up"; then
         print_success "Marzban Node Agent started successfully"
     else
         print_error "Failed to start Marzban Node Agent"
         print_status "Checking logs..."
-        docker-compose -f docker/docker-compose.yml logs
+        docker-compose -f docker/docker-compose.standalone.yml logs
         exit 1
     fi
 }

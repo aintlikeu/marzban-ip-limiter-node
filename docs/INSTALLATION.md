@@ -449,3 +449,100 @@ sudo chmod 644 /var/lib/marzban/access.log
 ---
 
 **Следующий раздел**: [Конфигурация](CONFIGURATION.md)
+
+## 🗑️ Удаление сервиса
+
+### Полное удаление
+
+Если вам нужно полностью удалить Marzban Node Agent из системы:
+
+```bash
+# Автоматическое удаление
+sudo /opt/marzban-node-agent/scripts/uninstall.sh
+
+# Или из исходного кода
+sudo ./scripts/uninstall.sh
+
+# Принудительное удаление без подтверждения
+sudo ./scripts/uninstall.sh --force
+```
+
+### Что удаляется
+
+Скрипт удаления выполняет следующие действия:
+
+1. **Остановка сервисов**:
+   - Останавливает systemd сервис
+   - Останавливает и удаляет Docker контейнеры
+
+2. **Удаление файлов**:
+   - Удаляет все файлы приложения из `/opt/marzban-node-agent/`
+   - Удаляет логи из `/var/log/marzban-node-agent/`
+   - Предлагает создать backup конфигурации
+
+3. **Очистка системы**:
+   - Удаляет systemd сервис `/etc/systemd/system/marzban-node-agent.service`
+   - Удаляет Docker образы
+   - Очищает cron задачи
+   - Удаляет logrotate конфигурацию
+   - Удаляет пользователя `marzban-agent`
+
+### Ручное удаление
+
+Если автоматический скрипт не работает, выполните ручное удаление:
+
+```bash
+# Остановка сервиса
+sudo systemctl stop marzban-node-agent
+sudo systemctl disable marzban-node-agent
+
+# Удаление systemd сервиса
+sudo rm -f /etc/systemd/system/marzban-node-agent.service
+sudo systemctl daemon-reload
+
+# Остановка Docker контейнеров
+docker stop marzban-node-agent
+docker rm marzban-node-agent
+
+# Удаление Docker образов
+docker rmi marzban-node-agent:latest
+
+# Удаление файлов
+sudo rm -rf /opt/marzban-node-agent/
+sudo rm -rf /var/log/marzban-node-agent/
+
+# Очистка cron и logrotate
+sudo crontab -l | grep -v marzban-node-agent | sudo crontab -
+sudo rm -f /etc/logrotate.d/marzban-node-agent
+```
+
+### Сохранение конфигурации
+
+Перед удалением вы можете сохранить конфигурацию:
+
+```bash
+# Backup конфигурации
+cp /opt/marzban-node-agent/config/.env ~/marzban-node-agent-backup.env
+
+# Backup логов
+cp -r /var/log/marzban-node-agent/ ~/marzban-node-agent-logs-backup/
+```
+
+### Проверка удаления
+
+После удаления проверьте, что все компоненты удалены:
+
+```bash
+# Проверка сервиса
+systemctl status marzban-node-agent
+
+# Проверка контейнеров
+docker ps -a | grep marzban-node-agent
+
+# Проверка файлов
+ls -la /opt/marzban-node-agent/
+ls -la /var/log/marzban-node-agent/
+
+# Проверка процессов
+ps aux | grep marzban-node-agent
+```

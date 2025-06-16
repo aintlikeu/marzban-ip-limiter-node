@@ -271,6 +271,7 @@ redis-cli -u $CENTRAL_REDIS_URL llen "node_logs_queue"
 
 - [Подробная установка](docs/INSTALLATION.md)
 - [Конфигурация](docs/CONFIGURATION.md)
+- [Удаление сервиса](docs/UNINSTALL.md)
 - [API и разработка](docs/API.md)
 
 ## 🤝 Поддержка

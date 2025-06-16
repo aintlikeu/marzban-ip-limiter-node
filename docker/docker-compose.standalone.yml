@@ -14,11 +14,6 @@ services:
     volumes:
       - /var/lib/marzban/access.log:/var/lib/marzban/access.log:ro
     
-    # Network configuration (connect to existing marzban network if available)
-    networks:
-      - default
-      - marzban-network
-    
     # Resource limits
     deploy:
       resources:
@@ -38,7 +33,7 @@ services:
     
     # Health check
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"import sys; sys.path.append('/app/src'); from node_agent.config import ConfigService; config = ConfigService.load_from_env(); print('OK')\" || exit 1"]
+      test: ["CMD-SHELL", "python -c \"import sys; sys.path.append('/app/src'); from node_agent.config import ConfigService; config = ConfigService.load_from_env(); print('✅ OK')\" || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -48,9 +43,3 @@ services:
     labels:
       - "com.marzban.service=node-agent"
       - "com.marzban.version=1.0.0"
-
-networks:
-  marzban-network:
-    external: true
-    name: marzban-network
-

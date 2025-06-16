@@ -34,20 +34,31 @@ Marzban Node Agent - это высокопроизводительный аге�
 ### Автоматическая установка
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/your-repo/marzban-node-agent/main/scripts/install.sh | sudo bash
+# Клонирование и установка
+git clone https://github.com/your-repo/marzban-node-agent.git
+cd marzban-node-agent
+sudo ./scripts/install.sh
 ```
 
-### Ручная установка
+### Настройка конфигурации
 
-1. **Настройка конфигурации:**
 ```bash
-cp config/.env.example .env
-nano .env
+# Интерактивная настройка
+./scripts/configure.sh
+
+# Или ручная настройка
+cp config/.env.example config/.env
+nano config/.env
 ```
 
-2. **Запуск с Docker Compose:**
+### Запуск
+
 ```bash
-docker-compose -f docker/docker-compose.yml up -d
+# Через systemd (рекомендуется)
+sudo systemctl start marzban-node-agent
+
+# Или через Docker Compose
+docker-compose -f docker/docker-compose.standalone.yml up -d
 ```
 
 ### Базовая конфигурация
@@ -67,7 +78,7 @@ ACCESS_LOG_PATH=/var/lib/marzban/access.log
 sudo /opt/marzban-node-agent/scripts/health-check.sh
 
 # Просмотр логов
-docker-compose -f docker/docker-compose.yml logs -f
+docker-compose -f docker/docker-compose.standalone.yml logs -f
 
 # Статус сервиса
 systemctl status marzban-node-agent
@@ -76,7 +87,8 @@ systemctl status marzban-node-agent
 ## 📚 Документация
 
 - [📦 Подробная установка](docs/INSTALLATION.md)
-- [⚙️ Конфигурация](docs/CONFIGURATION.md)  
+- [⚙️ Конфигурация](docs/CONFIGURATION.md)
+- [🗑️ Удаление сервиса](docs/UNINSTALL.md)
 - [📖 Полное руководство](docs/README.md)
 
 ## 🤝 Поддержка
@@ -91,3 +103,23 @@ MIT License - см. [LICENSE](LICENSE) для деталей.
 ---
 
 **Разработано для экосистемы Marzban** 🚀
+
+## 🗑️ Удаление
+
+### Полное удаление агента
+
+```bash
+# Автоматическое удаление
+sudo ./scripts/uninstall.sh
+
+# Принудительное удаление без подтверждения
+sudo ./scripts/uninstall.sh --force
+```
+
+### Что удаляется:
+- ✅ Systemd сервис и конфигурация
+- ✅ Docker контейнеры и образы  
+- ✅ Файлы приложения и конфигурация
+- ✅ Логи и временные файлы
+- ✅ Cron задачи и logrotate правила
+- ✅ Символические ссылки
