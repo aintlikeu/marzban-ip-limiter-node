@@ -97,10 +97,19 @@ copy_files() {
     cp config/requirements.txt "$CONFIG_DIR/"
     cp config/.env.example "$CONFIG_DIR/"
     
-    # Create default .env if it doesn't exist
-    if [ ! -f "$CONFIG_DIR/.env" ]; then
+    # Handle .env file configuration
+    if [ -f ".env" ]; then
+        # User has custom .env file in project directory - use it
+        cp .env "$CONFIG_DIR/.env"
+        print_success "Copied user .env file to $CONFIG_DIR/.env"
+    elif [ -f "config/.env" ]; then
+        # User has custom .env file in config directory - use it
+        cp config/.env "$CONFIG_DIR/.env"
+        print_success "Copied user .env file from config/ to $CONFIG_DIR/.env"
+    else
+        # No user .env file found - create from example
         cp "$CONFIG_DIR/.env.example" "$CONFIG_DIR/.env"
-        print_warning "Created default .env file at $CONFIG_DIR/.env"
+        print_warning "No user .env file found. Created default .env file at $CONFIG_DIR/.env"
         print_warning "Please edit this file with your configuration before starting the service!"
         
         # Set minimal required values to prevent immediate failure
