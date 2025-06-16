@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  node-agent:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: marzban-node-agent
+    restart: unless-stopped
+    
+    # Environment variables from .env file
+    env_file:
+      - ../.env
+    
+    # Mount access.log as read-only
+    volumes:
+      - /var/lib/marzban/access.log:/var/lib/marzban/access.log:ro
+      # Optional: mount for custom config
+      - ../config/.env:/app/.env:ro
+    
+    # Network configuration
+    networks:
+      - marzban-network
+    
+    # Resource limits (optional)
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.2'
+        reservations:
+          memory: 64M
+          cpus: '0.1'
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    
+    # Health check
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import requests; requests.get(\"http://localhost:8080/health\")' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    # Depends on Marzban service if running in same compose
+    depends_on:
+      - marzban
+    
+    # Labels for easier management
+    labels:
+      - "com.marzban.service=node-agent"
+      - "com.marzban.version=1.0.0"
+
+# Include Marzban service configuration (optional)
+  marzban:
+    image: gozargah/marzban:latest
+    container_name: marzban
+    restart: unless-stopped
+    env_file:
+      - ../marzban.env
+    volumes:
+      - /var/lib/marzban:/var/lib/marzban
+    ports:
+      - "8000:8000"
+    networks:
+      - marzban-network
+
+networks:
+  marzban-network:
+    driver: bridge
+    name: marzban-network
+
+# Optional: Redis service for local testing
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: redis-central
+  #   restart: unless-stopped
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis-data:/data
+  #   networks:
+  #     - marzban-network
+  #   command: redis-server --appendonly yes
+
+# volumes:
+#   redis-data:
